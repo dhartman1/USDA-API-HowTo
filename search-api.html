@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<!--
+Urban by TEMPLATED
+templated.co @templatedco
+Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+<head>
+  <title>Intro to the Search API</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="subpage">
+
+  <!-- Header -->
+  <header id="header">
+    <a href="#menu">Menu</a>
+  </header>
+
+  <!-- Nav -->
+  <nav id="menu">
+    <ul class="links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="intro-to-api.html">Intro to the USDA API</a></li>
+      <li><a href="search-api.html">Using the Search API</a></li>
+      <li><a href="report-api.html">Using the Report API</a></li>
+      <li><a href="nutrition-label.html">Mixing It All Together</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main -->
+  <div id="main">
+
+    <!-- Section -->
+    <section class="wrapper">
+      <div class="inner">
+        <header class="align-center">
+          <h1 class="brown-shadow">Using the Search API</h1>
+          <p>View the Search API <a class="brown-emphasize" href="https://ndb.nal.usda.gov/ndb/doc/apilist/API-SEARCH.md">here</a></p>
+        </header>
+
+        <div class="flex flex-2">
+          <div class="col col2">
+            <h3>Why is the Search API important?</h3>
+            <p>When you use the Search API you use keywords to query the USDA Food Composition Database and in return you get a list of all the food items that have one or more of those keywords in their description, scientific name, or commercial name. Each item in this list has a field called "ndbno" which contains a number that is unique to that food item.</p>
+            <p>Why is the ndbno important? A required argument of the Food Report API is the ndbno, so if you want to see all of the import nutritional information of a food then you need to get its ndbno. The easiest way to do that is using the Search API.</p>
+          </div>
+          <div class="col col1 first">
+            <div class="image round fit">
+              <img src="images/pic02.jpg" alt="usda-logo" />
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3>Using the Search API</h3>
+          <p>In this section, we are going to go through the process of setting up a call to the Search API. We are going to start with setting up our variables.</p>
+          <pre>
+            <code>var req = new XMLHttpRequest;
+
+var url = "https://api.nal.usda.gov/ndb/search?api_key=";
+var api_key = "DEMO_KEY";
+
+var payload = {
+  "q": "butter",    // search for butter
+  "max": "2",       // return at most 2 results
+  "sort": "n"       // sort by name
+};</code>
+            </pre>
+            <p>We set up "req" as a <b>XMLHttpRequest</b> which gives us the ability to send data back and forth to the USDA Database. Then we setup our "url" to the USDA Search API and our "api_key". In this example we are using "DEMO_KEY" for our API calls. "DEMO_KEY" was setup for anyone to use, but it is restricted to 30 requests per IP address per hour and 50 requests per IP address per day. Whereas if you get your own free API key from the USDA you get 1,000 requests per hour. After that, we setup our "payload." The payload delivers the information that informs the Search API as to what we want. This includes "q" which indicates that we want to search for the keyword "butter", with "max" we specify that we want, at most, 2 results back, and with "sort" we specify that we want the results sorted by name.</p>
+            <pre>
+              <code>req.open("POST", url + api_key, true);
+req.setRequestHeader("Content-Type", "application/json")
+req.send(JSON.stringify(payload));</code>
+              </pre>
+              <p>Now we are concatenating the url and api_key opening a <b>POST</b> type request to the resulting url. The <b>true</b> argument means that we want it to be an asynchronous request. Then we set the <b>Content-Type</b> header to <b>application/json</b> and send a stringified version of our payload to the USDA's server.</p>
+              <pre>
+                <code>req.addEventListener("load", function() {
+  if (req.status >= 200 && req.status < 400) {
+    document.getElementById("output").textContent = req.responseText;
+  }
+});</code>
+              </pre>
+              <p>Since this an asynchronous call, we add an event listener that executes a function after the request is loaded. The function being executed fills the html element with an id of <b>output</b> with the text response of the request, which is stored in <b>req.responseText</b>.</p>
+              <h4>Completing the Call</h4>
+              <p>The JSFiddle below shows the complete call to the Search API. You may notice on the results tab a field named <b>total</b>. At the time of writing this, there are 4,015 items in the Food Composition Database that meet the criteria for a search of "butter". So you may want to be a little more specific. Even when the search is changed to "food lion unsalted butter" there are 26 items.</p>
+              <p><iframe width="100%" height="500px" src="https://jsfiddle.net/hartmand/2nvaxmon/embedded/js,html,result/" allowfullscreen="allowfullscreen" frameborder="0"></iframe></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section -->
+        <section>
+          <div class="inner">
+            <div class="flex flex-2">
+              <div class="col align-right">
+                <a href="intro-to-api.html" class="button small">Prev</a>
+              </div>
+              <div class="col align-left">
+                <a href="report-api.html" class="button small">Next</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Footer -->
+      <footer id="footer">
+        <div class="copyright">
+          <p>&copy; David Hartman. Design: <a href="https://templated.co">TEMPLATED</a></p>
+        </div>
+      </footer>
+
+      <!-- Scripts -->
+      <script src="assets/js/jquery.min.js"></script>
+      <script src="assets/js/jquery.scrolly.min.js"></script>
+      <script src="assets/js/jquery.scrollex.min.js"></script>
+      <script src="assets/js/skel.min.js"></script>
+      <script src="assets/js/util.js"></script>
+      <script src="assets/js/main.js"></script>
+
+    </body>
+    </html>

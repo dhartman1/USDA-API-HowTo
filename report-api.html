@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<!--
+Urban by TEMPLATED
+templated.co @templatedco
+Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+<head>
+  <title>Intro to the Food Report API</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="subpage">
+
+  <!-- Header -->
+  <header id="header">
+    <a href="#menu">Menu</a>
+  </header>
+
+  <!-- Nav -->
+  <nav id="menu">
+    <ul class="links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="intro-to-api.html">Intro to the USDA API</a></li>
+      <li><a href="search-api.html">Using the Search API</a></li>
+      <li><a href="report-api.html">Using the Report API</a></li>
+      <li><a href="nutrition-label.html">Mixing It All Together</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main -->
+  <div id="main">
+
+    <!-- Section -->
+    <section class="wrapper">
+      <div class="inner">
+        <header class="align-center">
+          <h1 class="blue-shadow">Using the Food Report API</h1>
+          <p>View the Search API <a class="blue-emphasize" href="https://ndb.nal.usda.gov/ndb/doc/apilist/API-FOOD-REPORTV2.md">here</a></p>
+        </header>
+
+        <div class="flex flex-2">
+          <div class="col col2">
+            <h3>What is in the Food Report?</h3>
+            <p>The food report contains a lot of useful information about the food that you submit to it. This information is so valuable that you might say it's the "meat and potatoes" of the USDA APIs.</p>
+            <span>Some of the most important things in the report are:</span>
+            <ul class="pcolor">
+              <li>Ingredients</li>
+              <li>Serving Size</li>
+              <li>Nutrients
+                <ul>
+                  <li>For 100 grams (whether or not this is a serving size you'll find)</li>
+                  <li>For the default serving size</li>
+                  <li>For other serving sizes (if available)</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="col col1 first">
+            <div class="image round fit">
+              <img src="images/pic03.jpg" alt="usda-logo" />
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3>Using the Food Report API</h3>
+          <p>In this section, we are going to go through the process of setting up a call to the Food Report API. Because a lot of this process is the same as setting up a call to the Search API, we are only going to point out what's different.</p>
+          <pre>
+            <code>var url = "https://api.nal.usda.gov/ndb/reports/V2?api_key=";
+
+var payload = {
+  "ndbno": "01009",
+  "type": "f"
+};</code>
+          </pre>
+          <p>That is all that is different in this API call. First, the url where you send the call is different. The payload is slightly different. It includes an "ndbno" that indentifies the food you want the report on (you get "ndbno" from the Seach API call). In the payload, you also say what kind of report you want. There is "b" (Basic Report), which contains a limited set of common nutrients. There is "f" (Full Report), which contains all the nutrients available for that food. Lastly, there is "s" (Statistics Report), which provides a lot of statistical parameters from studies that include parameters like upper and lower error bounds data from studies on that food.</p>
+          <h4>Completing the Call</h4>
+          <p>The JSFiddle below shows the complete call to the Food Report API. It uses ndbno "01009", which is Cheddar Cheese.</p>
+          <p><iframe width="100%" height="500px" src="https://jsfiddle.net/hartmand/8j4Lo8rv/embedded/js,html,result/" allowfullscreen="allowfullscreen" frameborder="0"></iframe></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section -->
+    <section>
+      <div class="inner">
+        <div class="flex flex-2">
+          <div class="col align-right">
+            <a href="search-api.html" class="button small">Prev</a>
+          </div>
+          <div class="col align-left">
+            <a href="nutrition-label.html" class="button small">Next</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="copyright">
+      <p>&copy; David Hartman. Design: <a href="https://templated.co">TEMPLATED</a></p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery.scrolly.min.js"></script>
+  <script src="assets/js/jquery.scrollex.min.js"></script>
+  <script src="assets/js/skel.min.js"></script>
+  <script src="assets/js/util.js"></script>
+  <script src="assets/js/main.js"></script>
+
+</body>
+</html>

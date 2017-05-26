@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<!--
+Urban by TEMPLATED
+templated.co @templatedco
+Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+<head>
+  <title>Mixing It All Together</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Archivo+Black" />
+  <link rel="stylesheet" type="text/css" href="nutritionLabel.css">
+</head>
+<body class="subpage">
+
+  <!-- Header -->
+  <header id="header">
+    <a href="#menu">Menu</a>
+  </header>
+
+  <!-- Nav -->
+  <nav id="menu">
+    <ul class="links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="intro-to-api.html">Intro to the USDA API</a></li>
+      <li><a href="search-api.html">Using the Search API</a></li>
+      <li><a href="report-api.html">Using the Report API</a></li>
+      <li><a href="nutrition-label.html">Mixing It All Together</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main -->
+  <div id="main">
+
+    <!-- Section -->
+    <section class="wrapper">
+      <div class="inner">
+        <header class="align-center">
+          <h1 class="gray-shadow">Mixing It All Together</h1>
+        </header>
+
+        <div class="flex flex-2">
+          <div class="col col2">
+            <h3>What's Next?</h3>
+            <p>In this section, we are going to be using what we learned from the Search and Food Report APIs to make a Nutrition Label that fills itself based on the searched item.</p>
+            <p>As you may remember from previous sections, the result of the api calls were stored, as a string, in <code>req.responseText</code>. Before, we used this string to fill in an html element so you could see the result of the call. Now we want to parse the info from these strings so we can use it for more complex purposes.</p>
+          </div>
+          <div class="col col1 first">
+            <div class="image round fit">
+              <img src="images/pic04.jpg" alt="usda-logo" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3>Combining Search and the Food Report</h3>
+          <pre>
+            <code>var searchResponse = JSON.parse(req.responseText);</code>
+          </pre>
+          <p>This takes the string response from a funcion call and parses it into a JavaScipt Object and stores it into a variable for later use.</p>
+          <pre>
+            <code>var payload = {
+  "ndbno": searchResponse.list.item[0].ndbno,
+  "type": "f"
+};</code>
+          </pre>
+          <p>This creates the payload for the Food Report API using the ndbno from the first item in the result of the call to the Search API.</p>
+
+          <pre>
+            <code>var reportResponse = JSON.parse(req.responseText);
+var ingredients = reportResponse.report.food.ing.desc;
+var servingSize = nutrients[0].measures[0].qty + nutrients[0].measures.[0].label;
+
+var nutrients = reportResponse.report.food.nutrients
+for (var i=0; i&ltnutrients.length; i++) {
+  if (nutrients[i].nutrient_id == "208") {
+    var calories = nutrients[i].measures[0].value;
+  }
+}</code>
+          </pre>
+          <p>This parses the call to the Food Report API in the same way as above for the Search API. Then stores the ingredients and serving size into their own variables. Lastly, it searches through all of the nutrients to find the calories, which are identified by the "nutrient_id" of "208".</p>
+        </div>
+
+        <p>All of the concepts are implemented in the Nutrition Label below. First type the food you want to search for into the box beside "Keyword" and hit "Search!". Then you'll be given a list of results below. Simply select the radio button beside the result that you want and hit "Fill Label!".</p>
+
+        <div class="flex flex-2">
+          <div class="col col2">
+            <form>
+              <fieldset>
+                <legend>Search Box:</legend>
+                <table>
+                  <tr>
+                    <td><label for="search-keyword">Keyword(s):</label></td>
+                    <td><input type="text" name="search-keyword" id="search-keyword"></td>
+                  </tr>
+                </table>
+                <input type="submit" id="search-submit" value="Search!">
+              </fieldset>
+              <br />
+              <fieldset>
+                <legend>Search Results:</legend>
+                <div id="search-results">
+                </div>
+              </fieldset>
+            </form>
+          </div>
+          <div class="col col1 first">
+
+            <!-- HTML For Nutrition Label retrieved from https://github.com/nutritionix/nutrition-label -->
+            <div id="nf-label">
+              <div itemscope="" itemtype="http://schema.org/NutritionInformation" class="nf" style=" width: 280px;">
+                <div class="nf-title">Nutrition Facts</div>
+
+                <div class="nf-line">
+                  <div class="nf-per-container">
+                    <span id="servings-per-container"></span>
+                  </div>
+                  <div class="nf-serving">
+                    <div><!-- opening for serving size div -->
+                      Serving Size: <span id="serving-size" class="nf-pr" itemprop="servingSize">0</span>
+                    </div><!-- closing for serving size div -->
+                  </div><!-- end of class="nf-serving" -->
+                </div>
+
+                <div class="nf-bar2"></div>
+                <div class="nf-amount-per-serving">Amount per serving</div>
+                <div class="nf-calories">
+                  <span class="">Calories</span>
+                  <span id="calories" class="nf-pr" itemprop="calories">0</span>
+                </div>
+                <div class="nf-bar1"></div>
+                <div class="nf-line nf-text-right">
+                  <span class="nf-highlight nf-percent-dv">% Daily Value*</span>
+                </div>
+                <div class="nf-line">
+                  <span class="nf-highlight nf-pr"><span id="total-fat-percent">0</span>%</span>
+                  <span class="nf-highlight">Total Fat</span>
+                  <span><span id="total-fat" class="" itemprop="fatContent">0</span>g</span>
+                </div>
+                <div class="nf-line nf-indent">
+                  <span class="nf-highlight nf-pr"><span id="sat-fat-percent">0</span>%</span>
+                  <span class="">Saturated Fat</span>
+                  <span><span id="sat-fat" class="" itemprop="saturatedFatContent">0</span>g</span>
+                </div>
+                <div class="nf-line nf-indent">
+                  <span class=""><em>Trans</em> Fat</span>
+                  <span><span id="trans-fat" class="" itemprop="transFatContent">0</span>g</span>
+                </div>
+                <div class="nf-line">
+                  <span class="nf-highlight nf-pr"><span id="cholesterol-percent">0</span>%</span>
+                  <span class="nf-highlight">Cholesterol</span>
+                  <span><span id="cholesterol" class="" itemprop="cholesterolContent">0</span>mg</span>
+                </div>
+                <div class="nf-line">
+                  <span class="nf-highlight nf-pr"><span id="sodium-percent">0</span>%</span>
+                  <span class="nf-highlight">Sodium</span>
+                  <span><span id="sodium" class="" itemprop="cholesterolContent">0</span>mg</span>
+                </div>
+                <div class="nf-line">
+                  <span class="nf-highlight nf-pr"><span id="total-carbs-percent">0</span>%</span>
+                  <span class="nf-highlight">Total Carbohydrates</span>
+                  <span><span id="total-carbs" class="" itemprop="carbohydrateContent">0</span>g</span>
+                </div>
+                <div class="nf-line nf-indent">
+                  <span class="nf-highlight nf-pr"><span id="fiber-percent">0</span>%</span>
+                  <span class="">Dietary Fiber</span>
+                  <span><span id="fiber" class="" itemprop="fiberContent">0</span>g</span>
+                </div>
+                <div class="nf-line nf-indent">
+                  <!-- <span id="added-sugar-percent" class="nf-highlight nf-pr">0%</span> -->
+                  <span class="">Sugars</span>
+                  <span><span id="sugar" class="" itemprop="sugarContent">0</span>g</span>
+                </div>
+                <div class="nf-line">
+                  <span class="nf-highlight">Protein</span>
+                  <span><span id="protein" class="" itemprop="proteinContent">0</span>g</span>
+                </div>
+                <div class="nf-bar2"></div>
+                <div class="nf-vitamins">
+                  <div class="nf-vitamins">
+                    <div class="nf-vitamin-column">
+                      Vit. D <span><span id="vit-d">0</span>mcg</span> <span class="nf-pr"><span id="vit-d-percent">0</span>%</span>
+                    </div>
+                    <div class="nf-vitamin-column">
+                      Calcium <span><span id="calcium">0</span>mg</span> <span class="nf-pr"><span id="calcium-percent">0</span>%</span>
+                    </div>
+                    <div class="nf-vitamin-column">
+                      Iron <span><span id="iron">0</span>mg</span> <span class="nf-pr"><span id="iron-percent">0</span>%</span>
+                    </div>
+                    <div class="nf-vitamin-column">
+                      Potassium <span><span id="potassium">0</span>mg</span> <span class="nf-pr"><span id="potassium-percent">0</span>%</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="nf-bar1"></div>
+                <div class="nf-footnote">
+                  The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2000 calories a day is used for general nutrition advice.
+                  <br>
+
+                  <div class="nf-ingredientListDiv">
+                    <strong class="active" id="nf-ingredientList">INGREDIENTS:</strong>
+                    <span id="ingredients"></span>
+                  </div><!-- closing class="nf-ingredientListDiv" -->
+
+                </div>
+              </div><!-- closing class="nutritionLabel" -->
+
+              <div class="naTooltip">Data not available</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section -->
+    <section>
+      <div class="inner">
+        <div class="flex flex-2">
+          <div class="col align-right">
+            <a href="report-api.html" class="button small">Prev</a>
+          </div>
+          <div class="col align-left">
+            <a href="index.html" class="button small">Home</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="copyright">
+      <p>&copy; David Hartman. Design: <a href="https://templated.co">TEMPLATED</a></p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery.scrolly.min.js"></script>
+  <script src="assets/js/jquery.scrollex.min.js"></script>
+  <script src="assets/js/skel.min.js"></script>
+  <script src="assets/js/util.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/labelFiller.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+
+p, span, .pcolor{
+  color: #585858;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+a.green-emphasize {
+  color: #008357;
+  font-weight: bold;
+}
+
+
+.green-shadow {
+  text-shadow: 2px 2px #008357;
+}
+
+a.brown-emphasize {
+  color: #380000;
+  font-weight: bold;
+}
+
+.brown-shadow {
+  text-shadow: 2px 2px rgba(56, 0, 0, 0.45);
+}
+
+a.blue-emphasize {
+  color: #0099c5;
+  font-weight: bold;
+}
+
+.blue-shadow {
+  text-shadow: 2px 2px #0099c5;
+}
+
+a.gray-emphasize {
+  color: #909090;
+  font-weight: bold;
+}
+
+.gray-shadow {
+  text-shadow: 2px 2px #909090;
+}
+
+pre {
+  display: flex;
+  -webkit-overflow-scrolling: touch;
+  font-family: "Courier New", monospace;
+  font-size: 0.9em;
+  margin: 0 0 2em 0;
+}
+
+pre code {
+  width: 100%;
+  display: block;
+  line-height: 1.75;
+  padding: 1em 1.5em;
+  overflow-x: auto;
+}
